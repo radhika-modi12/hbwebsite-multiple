@@ -1,0 +1,13 @@
+/* global.css */
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/MyFont.woff2') format('woff2');
+  font-weight: 600;
+  font-size:20px
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: "Poppins", sans-serif !important;
+}
