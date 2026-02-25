@@ -6,7 +6,6 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
 import AdminLayout from "../../components/AdminLayout";
-// import { useRouter } from "next/router";
 
 const EditRoomImage = (props) => {
   const router = useRouter();

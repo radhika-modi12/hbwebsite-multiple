@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import AdminLayout from "../components/AdminLayout";

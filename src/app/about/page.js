@@ -1,23 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "../../../public/css/common.css";
-import SliderContent from "../../app/components/SliderContent";
 import "../../app/components/slider.css";
-import Arrows from "../../app/components/Arrows";
-import sliderImage from "../../app/components/sliderImage";
-import Dots from "../../app/components/Dots";
 import axios from "axios";
 import FrontLayout from "../FrontLayout";
+
 export default function About() {
   const [teamMember, setTeamMember] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
   useEffect(() => {
     loadTeamMember();
   }, []);
 
   const loadTeamMember = async () => {
-    const res = await axios.get("http://localhost:3000/api/teamMemberDetails");
+     try {
+    const res = await axios.get("/api/teamMemberDetails");
     setTeamMember(res.data.list);
+  } catch (error) {
+    console.error(error);
+  }
   };
   return (
     <FrontLayout>
