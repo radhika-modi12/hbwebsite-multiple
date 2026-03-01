@@ -37,12 +37,16 @@ export default function RoomDetails(props) {
   };
 
   const handleAddRoom = () => {
-    return router.push("/admin/room/add_room");
+      if (typeof window !== "undefined") {
+     router.push("/admin/room/add_room");
+      }
   };
-  const getData = (raw) => {
+ const getData = (raw) => {
+  if (typeof window !== "undefined") {
     localStorage.setItem("edit_room_data", JSON.stringify(raw));
-    window.location.href = "/admin/room/edit_room";
-  };
+    router.push("/admin/room/edit_room");
+  }
+};
 
   const deleteRoom = async (id) => {
     try {

@@ -13,9 +13,10 @@ export default function HotelDetails() {
   const [hotels, setHotels] = useState([]);
 
   const getData = (raw) => {
-    console.log("row_data",raw);
+     if (typeof window !== "undefined") {
     localStorage.setItem("hotel_data", JSON.stringify(raw));
     router.push(`/admin/hotel/edit_hotel`);
+     }
   };
 
   const filteredHotels = useMemo(() => {

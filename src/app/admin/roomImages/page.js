@@ -33,11 +33,15 @@ export default function RoomImages(props) {
   };
 
   const handleAddRoomImage = () => {
+     if (typeof window !== "undefined") {
     return router.push("/admin/roomImages/add_room_image");
+     }
   };
   const getData = (raw) => {
+     if (typeof window !== "undefined") {
     localStorage.setItem("edit_room_image_data", JSON.stringify(raw));
     window.location.href = "/admin/roomImages/edit_room_image";
+     }
   };
 
   const deleteRoomImage = async (id) => {

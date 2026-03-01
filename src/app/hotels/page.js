@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import FrontLayout from "../FrontLayout";
 import RatingStars from "../../app/components/RatingStars";
 
@@ -127,7 +126,6 @@ export default function Hotels() {
     try {
       const res = await axios.get("http://localhost:3000/api/hotels");
       const hotels = res.data.list;
-
       // Fetch rooms for each hotel in parallel
       const hotelsWithRooms = await Promise.all(
         hotels.map(async (hotel) => {

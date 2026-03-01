@@ -10,6 +10,20 @@ import AdminLayout from "../../components/AdminLayout";
 
 const EditFacility = (props) => {
   const router = useRouter();
+
+  useEffect(() => {
+    const data = localStorage.getItem("facility_data");
+    if (data) {
+      const parsed = JSON.parse(data);
+      formik.setValues({
+        id: parsed?._id || "",
+        name: parsed?.name || "",
+        description: parsed?.description || "",
+        icon: null, // Do not preload image file; user can re-upload
+      });
+    }
+  }, []);
+  
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -39,20 +53,7 @@ const EditFacility = (props) => {
       }
     },
   });
-
-    useEffect(() => {
-    const data = localStorage.getItem("facility_data");
-    if (data) {
-      const parsed = JSON.parse(data);
-      formik.setValues({
-        id: parsed?._id || "",
-        name: parsed?.name || "",
-        description: parsed?.description || "",
-        icon: null, // Do not preload image file; user can re-upload
-      });
-    }
-  }, []);
-
+  
    const handleClose = () =>{
      return router.push("/admin/facility");
   }
@@ -142,8 +143,4 @@ const EditFacility = (props) => {
     </AdminLayout>
   );
 };
-// const mapDispatchToProps = {
-//     addBlogData: Actions.addBlogData
-// }
-
 export default EditFacility;

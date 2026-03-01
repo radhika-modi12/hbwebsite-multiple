@@ -1,26 +1,35 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Head from "next/head";
 import Image from "next/image";
 import axios from "axios";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRegModalOpen, setIsRegModalOpen] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const router = useRouter();
-  const handleLogout = () => {
-    localStorage.clear();
+  
+   useEffect(() => {
+    const storedUser = localStorage.getItem("user-details");
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+    }
+  }, []);
+
+   const handleLogout = () => {
+    localStorage.removeItem("user-details");
+    setUserData(null);
     router.push("/");
   };
-  const user_data = JSON.parse(localStorage.getItem("user-details"));
 
   const initialValues = {
     email: "",
@@ -32,25 +41,31 @@ export default function Header() {
     password: Yup.string().required("Required"),
   });
 
-  const handleSubmit = async (values, { resetForm }) => {
+   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const userData = await axios.post(
+      const response = await axios.post(
         "http://localhost:3000/api/users/login",
         values
       );
-      
-      localStorage.setItem("user-details", JSON.stringify(userData));
+
+      // ✅ Store only response.data
+      localStorage.setItem(
+        "user-details",
+        JSON.stringify(response.data)
+      );
+
+      setUserData(response.data);
       resetForm();
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting form");
+      console.error("Login error:", error);
+      alert("Invalid credentials");
     }
   };
 
-  //register data
 
-  const initialRegValues = {
+  //register data
+ const initialRegValues = {
     name: "",
     email: "",
     phonenum: "",
@@ -70,37 +85,36 @@ export default function Header() {
     role: Yup.string().required("Required"),
     pincode: Yup.number().required("Required"),
     dob: Yup.date().required("Required"),
-    password: Yup.string().min(6, "Minimum 6 characters").required("Required"),
+    password: Yup.string().min(6).required("Required"),
     file: Yup.mixed().required("Image is required"),
   });
 
-  const handleRegSubmit = async (values, { resetForm }) => {
+ const handleRegSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
 
-    // Append text fields
     for (const key in values) {
       if (key !== "file") {
         formData.append(key, values[key]);
       }
     }
 
-    // Append image file
     if (values.file) {
       formData.append("file", values.file);
     }
 
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:3000/api/userCred",
         formData
       );
+
       alert("Registration successful!");
       resetForm();
       setPreview(null);
       setIsRegModalOpen(false);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting form");
+      console.error("Registration error:", error);
+      alert("Registration failed");
     }
   };
 
@@ -164,7 +178,7 @@ export default function Header() {
               >
                 About
               </Link>
-              {user_data ? (
+              {userData ? (
                 <Link
                   href="#"
                   className="text-gray-700 hover:text-blue-600 text-link login-btn text-white"

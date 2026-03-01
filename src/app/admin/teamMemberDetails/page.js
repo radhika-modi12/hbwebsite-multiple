@@ -31,11 +31,14 @@ export default function TeamMembers(props) {
   };
 
   const handleAddTeamMembers = () => {
-    return router.push("/admin/teamMemberDetails/add_team_member");
+     router.push("/admin/teamMemberDetails/add_team_member");
   };
+
   const getData = (raw) => {
+    if (typeof window !== "undefined") {
     localStorage.setItem("edit_team_member", JSON.stringify(raw));
     window.location.href = "/admin/teamMemberDetails/edit_team_member";
+    }
   };
 
   const deleteTeamMember = async (id) => {

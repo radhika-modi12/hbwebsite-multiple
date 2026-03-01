@@ -29,8 +29,10 @@ export default function carausals(props) {
   };
 
   const getData = (raw) => {
+     if (typeof window !== "undefined") {
     localStorage.setItem("carousal_data", JSON.stringify(raw));
     return router.push(`/admin/carausal/edit_carausal`);
+     }
   };
 
   const handleAddCarausal = () => {

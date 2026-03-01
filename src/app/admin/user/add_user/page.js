@@ -5,7 +5,6 @@ import * as Yup from "yup";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
 
 const AddUser = (props) => {
   const router = useRouter();
@@ -48,7 +47,6 @@ const AddUser = (props) => {
           headers: { "Content-Type": "multipart/form-data" },
         });
         resetForm();
-        // router.push("/admin/user");
          window.location.href = "/admin/user";
       } catch (error) {
         console.error("Error adding user:", error);

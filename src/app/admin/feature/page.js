@@ -25,7 +25,7 @@ export default function feature(props) {
     return router.push(`/admin/feature/edit_feature`);
   };
   const handleAddFeature = () => {
-    return router.push("/admin/feature/add_feature");
+     router.push("/admin/feature/add_feature");
   };
 
   const deleteFeature = async (id) => {

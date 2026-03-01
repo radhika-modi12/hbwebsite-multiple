@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
@@ -7,13 +7,19 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname(); // Get current path
   const router = useRouter();
 
-  const user_data = JSON.parse(localStorage.getItem("user_details"))
-  console.log("role",user_data?.role)
+   const [userData, setUserData] = useState(null);
 
-  const handleLogout = () => {
-    console.log("logout");
+  // ✅ Access localStorage inside useEffect
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user_details");
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+    }
+  }, []);
+
+ const handleLogout = () => {
     localStorage.clear();
-    return router.push("/admin/login");
+    router.push("/admin/login");
   };
 
   const navItems = [
@@ -33,7 +39,7 @@ export default function AdminLayout({ children }) {
   ];
 
   const filteredNavItems =
-  user_data?.role === "manager"
+  userData?.role === "manager"
     ? navItems.filter(item => item.label === "Booking Orders")
     : navItems;
 
@@ -68,27 +74,7 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6">
-        {/* <Toaster
-          position="top-right"
-          toastOptions={{
-            // Global styles
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-            success: {
-              style: {
-                background: "green",
-              },
-            },
-            error: {
-              style: {
-                background: "red",
-              },
-            },
-          }}
-        /> */}
+      <main className="flex-1 p-6">                
         <Toaster position="top-right" reverseOrder={false} />
         {children}
       </main>

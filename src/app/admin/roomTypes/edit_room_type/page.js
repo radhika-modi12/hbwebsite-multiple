@@ -9,6 +9,16 @@ import AdminLayout from "../../components/AdminLayout";
 
 const EditRoomType = (props) => {
   const router = useRouter();
+    useEffect(() => {
+    const data = localStorage.getItem("room_type_data");
+    if (data) {
+      const parsed = JSON.parse(data);
+      formik.setValues({
+        id: parsed._id || "",
+        name: parsed.name || "",
+      });
+    }
+  }, []);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -31,16 +41,6 @@ const handleClose = () =>{
   return router.push("/admin/roomTypes");
 }
 
-  useEffect(() => {
-    const data = localStorage.getItem("room_type_data");
-    if (data) {
-      const parsed = JSON.parse(data);
-      formik.setValues({
-        id: parsed._id || "",
-        name: parsed.name || "",
-      });
-    }
-  }, []);
 
   return (
     <AdminLayout>

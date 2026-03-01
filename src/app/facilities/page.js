@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FrontLayout from "../FrontLayout";
+
 export default function Facilities() {
   const [facilities, setFacilities] = useState([]);
   useEffect(() => {

@@ -88,9 +88,9 @@ const EditUser = (props) => {
       reader.readAsDataURL(file);
     }
   };
-
-  const data = localStorage.getItem("user_data");
+  
   useEffect(() => {
+    const data = localStorage.getItem("user_data");
     if (data) {
       const parsed = JSON.parse(data);
       setEditUser(parsed);

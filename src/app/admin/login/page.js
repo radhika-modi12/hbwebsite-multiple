@@ -27,7 +27,6 @@ export default function Login(props) {
         user_list
       );
       if (res) {
-        console.log("res1",res);
         localStorage.setItem("user_details",JSON.stringify(res.data.userDetail))
         toast.success("user login Success");
         return router.push("/admin");

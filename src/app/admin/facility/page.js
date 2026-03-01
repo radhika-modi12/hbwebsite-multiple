@@ -23,11 +23,15 @@ export default function facilities(props) {
   };
 
   const getData = (raw) => {
-    localStorage.setItem("facility_data", JSON.stringify(raw));
-    return router.push(`/admin/facility/edit_facility`);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("facility_data", JSON.stringify(raw));
+       router.push(`/admin/facility/edit_facility`);
+    }
   };
   const handleAddFacility = () => {
-    return router.push("/admin/facility/add_facility");
+     if (typeof window !== "undefined") {
+     router.push("/admin/facility/add_facility");
+     }
   };
 
   const deleteFacility = async (id) => {

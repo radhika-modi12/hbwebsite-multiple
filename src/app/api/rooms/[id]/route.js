@@ -4,11 +4,12 @@ import roomDetail from "../../../lib/models/room";
 
 export async function GET(req, { params }) {
   try {
-    const hotelId =params.id
+    const hotelId = await params['id']
+    console.log("id12",hotelId);
     await connectMongoDB();
     const roomData = await roomDetail.find({hotel_id:hotelId}).populate({
         path: 'hotel_id',
-        select: 'name area price _id' // Include name and email, exclude _id
+        select: 'name area price _id'
       });
     return NextResponse.json(
       { message: "room get", list: roomData },
