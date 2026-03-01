@@ -8,15 +8,24 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function ConfirmBooking() {
   const [days, setDays] = useState(0);
-  const user_data = JSON.parse(localStorage.getItem("user-details"));
-  const room_detail = JSON.parse(localStorage.getItem("room_detail"));
-  const [booking, setBooking] = useState(room_detail);
+  const [bookingDetail, setBookingDetail] = useState(null);
+  const [userData, setUserData] = useState(null);
+  // const user_data = JSON.parse(localStorage.getItem("user-details"));
+  // const bookingDetail = JSON.parse(localStorage.getItem("bookingDetail"));
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user-details");
+      const room = localStorage.getItem("bookingDetail");
+
+      if (user) setUserData(JSON.parse(user));
+      if (room) setBookingDetail(JSON.parse(room));
+    }
+  const [booking, setBooking] = useState(bookingDetail);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [isErrorModalOpen, setErrorModalOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   
   useEffect(() => {
-    const { checkin, checkout } = room_detail;
+    const { checkin, checkout } = bookingDetail;
     if (checkin && checkout) {
       const checkinDate = new Date(checkin);
       const checkoutDate = new Date(checkout);
@@ -30,7 +39,7 @@ export default function ConfirmBooking() {
     }
   }, []);
 
-  const user_info = user_data?.data?.userDetail;
+  const user_info = userData?.data?.userDetail;
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -56,7 +65,7 @@ export default function ConfirmBooking() {
   // Payment button handler
   const handlePayment = async (e) => {
     e.preventDefault();
-    const room_price = room_detail?.price / 100;
+    const room_price = bookingDetail?.price / 100;
     const percentage = 20;
     const result = (percentage / 100) * room_price;
     const booking_data = {
@@ -68,30 +77,19 @@ export default function ConfirmBooking() {
       checkin: booking?.checkin,
       checkout: booking.checkout,
       amount: result * 100,
-      room_id: room_detail?.room_id,
-      hotel_id: room_detail?.hotel_id,
-      hotel_name: room_detail?.hotel_name,
+      room_id: bookingDetail?.room_id,
+      hotel_id: bookingDetail?.hotel_id,
+      hotel_name: bookingDetail?.hotel_name,
       days: days,
     };
     localStorage.setItem("booking_detail", JSON.stringify(booking_data));
 
     try {
-//    await axios.get("http://localhost:3000/api/hotels");
-   
-//   const formData = new FormData();
-//   formData.append("id", room_detail?.hotel_id);
-//   formData.append("room", Number(room_detail.room) - 1);
-
-//  await axios.put(
-//   "http://localhost:3000/api/hotels",
-//   formData
-// );
-
       const booking_info = {
         user_id: user_info?._id,
-        room_id: room_detail?.room_id,
-        hotel_id: room_detail?.hotel_id,
-        quantity: room_detail?.quantity,
+        room_id: bookingDetail?.room_id,
+        hotel_id: bookingDetail?.hotel_id,
+        quantity: bookingDetail?.quantity,
         check_in: booking?.checkin,
         check_out: booking?.checkout,
         arrival: 1,
@@ -105,14 +103,13 @@ export default function ConfirmBooking() {
         booking_info,
       );
     } catch (error) {
-      // res.status(500).json({ message: "Internal Server Error!" });
       console.log(error);
     }
   };
 
   //   const handlePayment = async (e) => {
   //   e.preventDefault();
-  //   const room_price = room_detail?.price / 100;
+  //   const room_price = bookingDetail?.price / 100;
   //   const percentage = 20;
   //   const result = (percentage / 100) * room_price;
   //   const booking_data = {
@@ -124,9 +121,9 @@ export default function ConfirmBooking() {
   //     checkin: booking?.checkin,
   //     checkout: booking.checkout,
   //     amount: result * 100,
-  //     room_id: room_detail?.room_id,
-  //     hotel_id: room_detail?.hotel_id,
-  //     hotel_name: room_detail?.hotel_name,
+  //     room_id: bookingDetail?.room_id,
+  //     hotel_id: bookingDetail?.hotel_id,
+  //     hotel_name: bookingDetail?.hotel_name,
   //     days: days,
   //   };
   //   localStorage.setItem("booking_detail", JSON.stringify(booking_data));
@@ -146,7 +143,7 @@ export default function ConfirmBooking() {
 
   //     const options = {
   //       key: "rzp_live_HjOxVq1GThuok4", // Replace with your key_id
-  //       amount: room_detail?.price,
+  //       amount: bookingDetail?.price,
   //       currency: "INR",
   //       name: "Hotel Booking",
   //       description: "Test Transaction",
@@ -162,8 +159,8 @@ export default function ConfirmBooking() {
   //         setPaymentDetails(paymentInfo);
   //         const booking_info = {
   //           user_id: user_info?._id,
-  //           room_id: room_detail?.room_id,
-  //           hotel_id: room_detail?.hotel_id,
+  //           room_id: bookingDetail?.room_id,
+  //           hotel_id: bookingDetail?.hotel_id,
   //           check_in: booking?.checkin,
   //           check_out: booking?.checkout,
   //           arrival: 1,
@@ -195,8 +192,8 @@ export default function ConfirmBooking() {
 
   //     const booking_info = {
   //       user_id: user_info?._id,
-  //       room_id: room_detail?.room_id,
-  //       hotel_id: room_detail?.hotel_id,
+  //       room_id: bookingDetail?.room_id,
+  //       hotel_id: bookingDetail?.hotel_id,
   //       check_in: booking?.checkin,
   //       check_out: booking?.checkout,
   //       arrival: 1,
@@ -220,7 +217,6 @@ export default function ConfirmBooking() {
     const value = target && target.value;
     const updatedBooking = { ...booking, [name]: value };
     setBooking(updatedBooking);
-    // Calculate the number of days if both dates are selected
 
     const { checkin, checkout } = updatedBooking;
     if (checkin && checkout) {
@@ -236,7 +232,7 @@ export default function ConfirmBooking() {
     }
   };
 
-  const totalPay = (room_detail?.price / 100) * days;
+  const totalPay = (bookingDetail?.price / 100) * days;
   return (
     <FrontLayout>
       <>
@@ -244,33 +240,16 @@ export default function ConfirmBooking() {
           <div className="row">
             <div className="col-12 my-5 mb-4 px-4">
               <h2 className="fw-bold">CONFIRM BOOKING</h2>
-              {/* <div style={{ fontSize: "14px" }}>
-              <a
-                href="index.php"
-                className="text-secondary text-decoration-none"
-              >
-                HOME
-              </a>              
-              <a
-                href="rooms.php"
-                className="text-secondary text-decoration-none"
-              >
-                ROOMS
-              </a>              
-              <a href="#" className="text-secondary text-decoration-none">
-                CONFIRM
-              </a>
-            </div> */}
             </div>
             <div className="col-lg-6 col-md-12 px-4">
               <div className="card p-3 shadow-sm rounded">
                 <img
-                  src={room_detail?.image}
+                  src={bookingDetail?.image}
                   className="img-fluid rounded mb-3"
                   style={{ height: "482px", width: "unset!important" }}
                 />
-                <h5>{room_detail?.name}</h5>
-                <h6>₹{room_detail?.price / 100} per night</h6>
+                <h5>{bookingDetail?.name}</h5>
+                <h6>₹{bookingDetail?.price / 100} per night</h6>
               </div>
             </div>
             <div className="col-lg-5 col-md-12 px-4">
