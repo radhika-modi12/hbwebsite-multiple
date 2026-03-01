@@ -5,8 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import FrontLayout from "../FrontLayout";
 import RatingStars from "../../app/components/RatingStars";
 
-export default function Hotels() {
-  const searchParams = useSearchParams();
+export default function Hotels({ searchParams }) {
+  // const searchParams = useSearchParams();
   const checkIn = searchParams.get("check-in");
   const checkOut = searchParams.get("check-out");
   const room_count = searchParams.get("room");
