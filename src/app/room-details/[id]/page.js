@@ -5,8 +5,8 @@ import { useSearchParams } from "next/navigation";
 import SliderContent from "../../../app/components/SliderContent";
 import Arrows from "../../../app/components/Arrows";
 
-export default function roomDetail() {
-  const searchParams = useSearchParams();
+export default function roomDetail({searchParams}) {
+  // const searchParams = useSearchParams();
   const { id } = searchParams.get("room_id");
   const [roomFacilities, setRoomFacilities] = useState({});
   const [activeIndex, setActiveIndex] = useState(0);

@@ -11,9 +11,9 @@ import { useRouter } from "next/navigation";
 import FrontLayout from "../FrontLayout";
 import { toast } from "react-hot-toast";
 
-export default function roomDetail() {
+export default function roomDetail({searchParams}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const room_id = searchParams.get("roomId");
   const [roomFacilities, setRoomFacilities] = useState({});
   const [roomImages, setRoomImages] = useState([]);

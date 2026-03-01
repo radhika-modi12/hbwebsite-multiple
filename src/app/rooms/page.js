@@ -6,8 +6,8 @@ import { useSearchParams } from "next/navigation";
 import FrontLayout from "../FrontLayout";
 import { toast } from "react-hot-toast";
 
-export default function Room() {
-  const searchParams = useSearchParams();
+export default function Room({searchParams}) {
+  // const searchParams = useSearchParams();
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);

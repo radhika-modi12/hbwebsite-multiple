@@ -5,11 +5,11 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import AdminLayout from "../../components/AdminLayout"; // Adjust the path as needed
 
-export default function viewBookingOrder() {
+export default function viewBookingOrder({searchParams}) {
   const [isOpen, setIsOpen] = useState(false);
   const [bookingOrders, setBookingOrders] = useState([]);
   const [rawData, setRawData] = useState({});
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const hotelId = searchParams.get("hotel_id");
 
   useEffect(() => {
